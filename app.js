@@ -139,7 +139,6 @@ io.on("connection", (socket) => {
     socket.join(userId);
 
     getUserChats(userId).then((chatsWithParticipantsData) => {
-      console.log(chatsWithParticipantsData);
       io.to(userId).emit("getChats", JSON.stringify(chatsWithParticipantsData));
       if (chatsWithParticipantsData.length === 0) {
         io.to(userId).emit("getChats", JSON.stringify([]));
@@ -173,7 +172,6 @@ io.on("connection", (socket) => {
               receiver: data.receiver,
             })
           );
-          console.log({ ...data.chat.messages[0], status: "sent" });
         });
       });
 
