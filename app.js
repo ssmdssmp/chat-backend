@@ -15,6 +15,7 @@ const router = express.Router();
 const RTDatabase = admin.database();
 
 app.use(express.json());
+
 const getUserData = async (id) => {
   try {
     const ref = RTDatabase.ref(`userData/${id}`);
@@ -96,6 +97,7 @@ const getUserChats = async (userId) => {
                         sender: messageData.sender,
                         text: messageData.text,
                         timestamp: messageData.timestamp,
+                        messageStatus: messageData.messageStatus,
                       }))
                       .sort((a, b) => {
                         const dateA = new Date(a.timestamp);
@@ -124,7 +126,6 @@ const getUserChats = async (userId) => {
       await Promise.all(promises);
     } else {
     }
-
     return chatsWithReceiverData;
   } catch (error) {
     console.error(error);
@@ -167,7 +168,7 @@ io.on("connection", (socket) => {
             JSON.stringify({
               chat: {
                 ...data.chat,
-                messages: [{ ...data.chat.messages[0], status: "sent" }],
+                messages: [{ ...data.chat.messages[0], messageStatus: "sent" }],
               },
               receiver: data.receiver,
             })
